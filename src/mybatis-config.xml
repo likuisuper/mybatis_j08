@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <settings>
+<!--        是否开启驼峰命名自动映射,即从经典数据库列名 A_CLOUMN映射到经典JAVA属性名aColumn-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+<!--    主要是给参数类型或者返回类型取别名-->
+    <typeAliases>
+<!--        第一种写法：一一取别名 - 不推荐使用&ndash;&gt;-->
+<!--        <typeAlias type="tech.aistar.homework.entity.User" alias="user"></typeAlias>-->
+<!--        第二种写法：可以直接扫包操作，允许出现多个package标签-->
+<!--        <package name="tech.aistar.entity"/>-->
+        <package name="tech.aistar.homework.entity"/>
+    </typeAliases>
+
+    <!--配置DB环境-->
+    <environments default="dev">
+<!--            开发的过程中 - 开发环境,测试环境,产品上线环境-->
+        <environment id="dev">
+<!--            事务管理器 - 使用的也是JDBC事务 - 由底层的MYSQL决定的-->
+<!--            唯一的区别：JDBC中的事务是自动提交，但是mybatis是需要手动提交的-->
+            <transactionManager type="JDBC"></transactionManager>
+<!--            数据源 - 重量级对象,一个项目只要一个数据源-->
+<!--            UNPOOLED - 一次请求,一次连接,等同于jdbc中使用DriverManager.getConnection的方式获取DB连接-->
+<!--            POOLED - 引入了"池化"的概念，连接池的概念-->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/j08"/>
+                <property name="username" value="root"/>
+                <property name="password" value="root"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+<!--        引入的映射文件-->
+<!--        <mapper resource="resources/userDaoMapper.xml"/>-->
+
+<!--        mapper代理开发方式之后的配置-->
+<!--        <mapper class="tech.aistar.mapper.UserMapper"></mapper>-->
+        
+<!--        mapper代理开发方式 - 扫包 -mapper接口所在的包-->
+<!--        <package name="tech.aistar.mapper"/>-->
+        <package name="tech.aistar.homework.mapper"/>
+    </mappers>
+</configuration>

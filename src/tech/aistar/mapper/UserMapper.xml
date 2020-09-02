@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.aistar.mapper.UserMapper">
+    <select id="findAll" resultType="User">
+        select * from tbl_user
+    </select>
+
+    <insert id="save" parameterType="user">
+        <!-- 当有多个属性时不能在#中使用value-->
+        insert into tbl_user(user_name, password, birthday, gender) values(#{username},#{password},#{birthday},#{gender})
+    </insert>
+
+    <select id="getById" resultType="User" parameterType="integer">
+        select * from tbl_user where id=#{value}
+    </select>
+
+    <delete id="delById" parameterType="int">
+        delete from tbl_user where id=#{value}
+    </delete>
+
+    <select id="findLikeUserName" resultType="User" parameterType="string">
+        select * from tbl_user where user_name like "%"#{value}"%"
+    </select>
+
+    <update id="update" parameterType="User">
+        update tbl_user set user_name=#{userName},password=#{password},birthday=#{birthday},gender=#{gender}
+        where id=#{id}
+    </update>
+</mapper>

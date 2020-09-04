@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.aistar.mapper.UserInfoMapper">
+    <insert id="insertUserInfo" parameterType="userInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into userinfo values (null,#{username},#{userAddress})
+    </insert>
+
+<!--    映射类 type就是要被映射的类-->
+    <resultMap id="userinfomap" type="userInfo">
+<!--        property - 属性(实体类userInfo中的属性),cloumn - 数据库中表的列-->
+        <id property="id" column="id"/>
+        <id property="username" column="username"/>
+        <id property="userAddress" column="user_address"/>
+    </resultMap>
+
+<!--    查询时可以省略parameterType-->
+    <select id="selectById" resultMap="userinfomap" parameterType="int">
+        select * from userinfo
+        where id=#{id}
+    </select>
+</mapper>

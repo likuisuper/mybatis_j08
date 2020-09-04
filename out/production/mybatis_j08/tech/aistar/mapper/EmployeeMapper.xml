@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.aistar.mapper.EmployeeMapper">
+    <resultMap id="employeeInfo" type="employeeResult">
+        <id column="id" property="id"/>
+        <result column="emp_id" property="empId"/>
+        <result column="emp_sex" property="empSex"/>
+        <result column="emp_department" property="empDepartment"/>
+        <result column="dep_leader_id" property="depLeaderId"/>
+        <result column="dep_leader_name" property="depLeaderName"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="employeeInfo">
+        select e.*, d.id, d.dep_leader_id, d.dep_leader_name
+        from employee e
+                 left join department d on e.emp_department = d.id
+    </select>
+
+    <select id="findById" resultType="EmployeeAsset">
+        select e.emp_id, e.emp_name, e.emp_department, d.dep_name, asset.asset_name, da.lent_purpose, da.lent_date
+        from employee e
+                 left join department d on e.emp_department = d.id
+                 left join deal_asset da on e.emp_id = da.lent_emp_id
+                 left join asset on da.lent_asset_id = asset.asset_id
+        where e.emp_id = #{id}
+    </select>
+
+    <update id="updateDepartById" parameterType="employee">
+        update employee
+        <set>
+            <if test="empDepartment!=null">
+                emp_department=#{empDepartment}
+            </if>
+        </set>
+        where emp_id=#{empId}
+    </update>
+
+    <select id="getStationCount" resultType="stationCount">
+        select s.id,s.pos_name,count(*) count from employee e
+        left join station s on e.emp_position_id=s.id
+        group by s.id,s.pos_name
+    </select>
+
+    <select id="selectByDate" resultType="employeeDate" parameterType="employeeDate">
+        select * from asset
+        <trim prefix="where" prefixOverrides="and">
+            <choose>
+                <when test="assetId!=null">
+                    and asset_id=#{assetId}
+                </when>
+                <when test="assetName!=null">
+                    and asset_name=#{assetName}
+                </when>
+                <when test="assetStatus!=null">
+                    and asset_pur_date=#{assetPurDate}
+                </when>
+            </choose>
+        </trim>
+    </select>
+</mapper>

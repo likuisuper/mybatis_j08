@@ -12,11 +12,17 @@
 <!--    主要是给参数类型或者返回类型取别名-->
     <typeAliases>
 <!--        第一种写法：一一取别名 - 不推荐使用&ndash;&gt;-->
-<!--        <typeAlias type="tech.aistar.homework.entity.User" alias="user"></typeAlias>-->
+<!--        <typeAlias type="tech.aistar.homework.tech.aistar.entity.User" alias="user"></typeAlias>-->
 <!--        第二种写法：可以直接扫包操作，允许出现多个package标签-->
-<!--        <package name="tech.aistar.entity"/>-->
-        <package name="tech.aistar.homework.entity"/>
+        <package name="tech.aistar.entity"/>
+        <package name="tech.aistar.dto"/>
+        <package name="tech.aistar.params"/>
+<!--        <package name="tech.aistar.homework.tech.aistar.entity"/>-->
     </typeAliases>
+
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor"></plugin>
+    </plugins>
 
     <!--配置DB环境-->
     <environments default="dev">
@@ -30,7 +36,7 @@
 <!--            POOLED - 引入了"池化"的概念，连接池的概念-->
             <dataSource type="POOLED">
                 <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://localhost:3306/j08"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/asset?serverTimezone=UTC"/>
                 <property name="username" value="root"/>
                 <property name="password" value="root"/>
             </dataSource>
@@ -45,7 +51,7 @@
 <!--        <mapper class="tech.aistar.mapper.UserMapper"></mapper>-->
         
 <!--        mapper代理开发方式 - 扫包 -mapper接口所在的包-->
-<!--        <package name="tech.aistar.mapper"/>-->
-        <package name="tech.aistar.homework.mapper"/>
+        <package name="tech.aistar.mapper"/>
+<!--        <package name="tech.aistar.homework.mapper"/>-->
     </mappers>
 </configuration>

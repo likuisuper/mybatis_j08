@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.aistar.mapper.TendencyMapper">
+    <select id="selectBySupCode" resultType="tendency">
+        select * from tendency
+        where sup_code=#{supCode}
+    </select>
+
+    <select id="selectBySupCodeAndDate" resultType="tendency">
+        select * from tendency
+        where sup_code=#{sc} and
+        create_date &gt;#{cd} and
+        create_date &lt;#{ed}
+    </select>
+
+<!--    如果参数包含类，则指定参数类型-->
+    <select id="selectBySupCodeAndDateObject" resultType="tendencyResult" parameterType="tendecyQueryParameter">
+        select sup_code,sup_name,round(avg(arv_rate),2) arvRate,round(avg(pass_rate),2) passRate,
+               substring(create_date,1,7) `month` from tendency
+        where sup_code=#{supCode} and
+        create_date &gt;=#{startDate} and
+        create_date &lt;date_add(#{endDate},interval 1 MONTH)
+        group by substring(create_date,1,7),sup_name
+    </select>
+
+    <select id="selectBySupCodeAndDateMap" resultType="tendencyResult">
+        select sup_code, sup_name,round(avg(arv_rate),2) arvRate,round(avg(pass_rate),2) passRate,substring(create_date,1,7) `month`  from tendency
+        where sup_code=#{supCode} and
+        create_date &gt;= #{startDate} and
+        create_date &lt; date_add(#{endDate}, interval 1 MONTH)
+        group by substring(create_date,1,7), sup_name
+    </select>
+
+    <select id="selectByPage" resultType="tendencyResult">
+        select sup_code,sup_name,round(avg(arv_rate),2) arvRate,round(avg(pass_rate),2) passRate,substring(create_date,1,7) `month` from tendency
+        where sup_code=#{tqp.supCode} and
+        create_date &gt;=#{tqp.startDate} and
+        create_date &lt;date_add(#{tqp.endDate},interval 1 MONTH)
+        group by substring(create_date,1,7),sup_name
+        limit #{pip.startOffset},#{pip.pageSize}
+    </select>
+</mapper>

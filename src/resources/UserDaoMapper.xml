@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="user">
-    <select id="getAll" resultType="tech.aistar.homework.entity.User">
+    <select id="getAll" resultType="tech.aistar.homework.tech.aistar.entity.User">
         select * from tbl_user
     </select>
     

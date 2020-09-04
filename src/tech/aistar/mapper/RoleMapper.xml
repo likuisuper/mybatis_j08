@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.aistar.mapper.RoleMapper">
+    <select id="findRoleByName" resultType="role">
+        select * from t_role
+        <if test="rn!=null">
+            where role_name=#{rn}
+        </if>
+    </select>
+
+<!--    按照不同的条件拼接出来的sql总是正确的，就Ok,确保->语法上没有问题-->
+    <select id="findRoleByNameAndNote" resultType="role">
+        select * from t_role
+        where 1=1
+        <if test="rn!=null">
+            and role_name like concat('%',#{rn},'%')
+        </if>
+        <if test="nt!=null">
+            and note like concat('%',#{nt},'%')
+        </if>
+    </select>
+
+<!--    如果trim标签内有内容成立，则会改变内容加上where前缀，如果改变内容前面有prefixOverrides代表的内容，-->
+<!--    如此处的and,则直接去掉-->
+    <select id="findRoleByRole" resultType="role" parameterType="role">
+        select * from t_role
+        <trim prefix="where" prefixOverrides="and">
+            <choose>
+                <when test="id!=null">
+                    and id=#{id}
+                </when>
+                <when test="roleName!=null">
+                    and role_name like #{pattern_roleName}
+                </when>
+                <otherwise>
+                    and note like concat('%',#{note},'%')
+                </otherwise>
+            </choose>
+        </trim>
+    </select>
+
+<!--    trim 前缀 后缀 前缀去除 后缀去除 可以组合使用-->
+    <update id="updateRoleById" parameterType="role">
+        update t_role
+        <set>
+            <if test="roleName!=null">
+                role_name=#{roleName},
+            </if>
+            <if test="note!=null">
+                note=#{note},
+            </if>
+        </set>
+            where id=#{id}
+    </update>
+
+    <select id="selectRoleByIds" resultType="role">
+        select * from t_role
+        <if test="list!=null">
+            where id in
+            <foreach collection="list" separator="," open="(" close=")" item="data">
+            #{data}
+            </foreach>
+        </if>
+    </select>
+</mapper>
